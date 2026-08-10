@@ -1,5 +1,5 @@
 /* Overload SW — network-first, cache fallback for offline use */
-var CACHE = "overload-v2";
+var CACHE = "overload-v3";
 var ASSETS = ["./", "./index.html", "./manifest.json", "./icon-180.png", "./icon-512.png"];
 
 self.addEventListener("install", function (e) {
