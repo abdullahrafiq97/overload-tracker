@@ -165,7 +165,8 @@ var ALIASES={
   "mts row (ea. side)":"MTS row (ea. side)","converging chest supported row (mts, ea. side)":"MTS row (ea. side)",
   "hammer biceps (ea. side)":"Hammer biceps","incline dumbbell curl (ea. side)":"Incline dumbbell curl",
   "triceps press narrow grip":"Triceps press","incline press mts (ea. side)":"Incline press (ea. side)",
-  "chest dips":"Assisted dip"
+  "chest dips":"Assisted dip",
+  "lateral raise":"Lateral raise (ea. side)","biceps curl":"Biceps curl machine"
 };
 function canon(n){n=String(n||"").trim().replace(/\s+/g," ");return ALIASES[n.toLowerCase()]||n;}
 
@@ -223,6 +224,12 @@ function loadStore(){
   return st;
 }
 var S=loadStore();
+/* rename merged exercises in stored data (safe to run every load) */
+(function(){
+  S.sessions.forEach(function(s){s.exercises.forEach(function(e){e.name=canon(e.name);});});
+  Object.keys(S.program||{}).forEach(function(id){var seen={};S.program[id].items=S.program[id].items.filter(function(it){it.name=canon(it.name);if(seen[it.name])return false;seen[it.name]=1;return true;});});
+  Object.keys(S.meta||{}).forEach(function(k){var c=canon(k);if(c!==k){if(!S.meta[c])S.meta[c]=S.meta[k];delete S.meta[k];}});
+})();
 function save(){S.sessions.sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});lsSet(K2,JSON.stringify(S));}
 save();
 function meta(name){return Object.assign(defaultMeta(name),S.meta[name]||{});}
