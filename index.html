@@ -155,7 +155,7 @@ body.typing .tabs,body.typing .sticky{display:none!important;}
 "use strict";
 /* ================= helpers ================= */
 var K1="overload_workouts_v1", K2="overload_v2", KD="overload_draft_v2";
-var PROGRAM_REV=2;
+var PROGRAM_REV=3;
 function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
 function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
@@ -201,7 +201,7 @@ function defaultProgram(){return {
   backA:{label:"Back + Shoulders — A",group:"Back",items:[I("Lat pulldown wide grip",4),I("Rowing",4),I("MTS row (ea. side)",3),I("Assisted pullup",3),I("Shoulder press",4),I("Lateral raise (ea. side)",4),I("Rear delt",3),I("Back extension",4)]},
   legsA:{label:"Legs + Biceps — A",group:"Legs",items:[I("Leg press",4),I("Leg extension",4),I("Seated leg curl",3),I("Seated calf raise",4),I("Hip abductor (outer)",4),I("Hip adductor (inner)",3),I("Biceps curl machine",3),I("Hammer biceps",3),I("Dependent curl",3)]},
   chestB:{label:"Chest + Triceps — B",group:"Chest",items:[I("Chest press",4),I("Incline smith press",4),I("Pec fly",4),I("Assisted dip",3),I("Triceps rope",3),I("Overhead tricep",3),I("Lateral raise (ea. side)",2),I("Lying pullover",3,"o"),I("Rotary torso",3,"c"),I("Abs crunch",3,"c")]},
-  backB:{label:"Back + Shoulders — B",group:"Back",items:[I("Lat pulldown close group",4),I("Seated row machine",4),I("MTS row (ea. side)",3),I("One arm row",4),I("MTS front pulldown (ea. side)",3),I("Seated dumbbell shoulder press (ea. side)",4),I("Lateral raise (ea. side)",3),I("Face pulls",3)]},
+  backB:{label:"Back + Shoulders — B",group:"Back",items:[I("Lat pulldown close group",4),I("Seated row machine",4),I("One arm row",4),I("MTS front pulldown (ea. side)",3),I("Seated dumbbell shoulder press (ea. side)",4),I("Lateral raise (ea. side)",3),I("Face pulls",3)]},
   legsB:{label:"Legs + Biceps — B",group:"Legs",items:[I("Hack squat",4),I("Leg extension",4),I("Seated leg curl",3),I("Seated calf raise",4),I("Hip abductor (outer)",3),I("Incline dumbbell curl",3),I("Cable curl bicep",3),I("Biceps curl machine",3)]}
 };}
 var COMPOUND=/chest press|incline press|smith|pulldown|rowing|row machine|mts row|one arm row|shoulder press|leg press|hack squat|bulgarian|pullup|dip/i;
@@ -288,6 +288,10 @@ function normalize(st){
     var pi=-1; cb.forEach(function(x,i){if(x.name==="Lying pullover")pi=i;});
     if(pi>=0){var p=cb.splice(pi,1)[0];p.optional=true;var ci=-1;cb.forEach(function(x,i){if(ci<0&&x.core)ci=i;});if(ci<0)cb.push(p);else cb.splice(ci,0,p);}
     st.rev=2;
+  }
+  if(st.rev<3){
+    st.program.backB.items=st.program.backB.items.filter(function(x){return x.name!=="MTS row (ea. side)";});
+    st.rev=3;
   }
   st.v=2;
   return st;
